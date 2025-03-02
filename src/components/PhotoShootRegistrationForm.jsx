@@ -126,10 +126,10 @@ const PhotoShootRegistrationForm = () => {
       });
       
       // Log the URL you're submitting to
-      console.log("Submitting to URL:", 'YOUR_GOOGLE_SCRIPT_URL');
+      console.log("Submitting to URL:", 'https://script.google.com/macros/s/AKfycbwqXTghtGBFkC2djBeN5DdrNtIopj32CoClejRIzLw7uQlPADdsalgaooR5Yg8E1eoP/exec');
       
       // Submit the form data to Google Sheets
-      fetch('YOUR_GOOGLE_SCRIPT_URL', {
+      fetch('https://script.google.com/macros/s/AKfycbwqXTghtGBFkC2djBeN5DdrNtIopj32CoClejRIzLw7uQlPADdsalgaooR5Yg8E1eoP/exec', {
         method: 'POST',
         body: formToSubmit
       })
