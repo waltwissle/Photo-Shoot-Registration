@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // No need to import Lucide icons if they're not working
-const [isSubmitting, setIsSubmitting] = useState(false);
+import { AlertCircle, Camera, Check } from 'lucide-react';
+
 
 const PhotoShootRegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const PhotoShootRegistrationForm = () => {
   const [photoCode, setPhotoCode] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Generate a unique 5-digit alphanumeric code
   const generateUniqueCode = () => {
