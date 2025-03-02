@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // No need to import Lucide icons if they're not working
+const [isSubmitting, setIsSubmitting] = useState(false);
 
 const PhotoShootRegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -111,7 +112,7 @@ const PhotoShootRegistrationForm = () => {
       formDataToSend.append('Notes', formData.notes);
       
       // Send data to Google Sheets
-      fetch('https://script.google.com/macros/s/AKfycbyl9vD0Ls7jQx9kLt41SAc3bRRvDT3h2fsod_FEu0gmSXtg86JDeC3tTOCnw59YOa3F/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbzx4eJsW8gOj8hYK3xsMlbbVaLDXy6vgBpFxiH3WXqQnOyMR-fi8mIBwAVKB2n1xRN1/exec', {
         method: 'POST',
         body: formDataToSend
       })
@@ -453,9 +454,10 @@ const PhotoShootRegistrationForm = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          style={styles.submitBtn}
+          disabled={isSubmitting}
+          className="w-full bg-blue-600 text-white py-3 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:bg-blue-400"
         >
-          Submit Registration
+          {isSubmitting ? 'Submitting...' : 'Submit Registration'}
         </button>
       </form>
     </div>
