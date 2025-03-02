@@ -98,32 +98,55 @@ const PhotoShootRegistrationForm = () => {
     e.preventDefault();
     
     if (validateForm()) {
-      // Format additional contacts as a string
-      const formattedContacts = formData.additionalContacts.filter(contact => contact).join(', ');
+      setIsSubmitting(true);
+      console.log("Form validated, preparing to submit");
       
-      // Prepare form data
-      const formDataToSend = new FormData();
-      formDataToSend.append('Full Name', formData.fullName);
-      formDataToSend.append('Email', formData.email);
-      formDataToSend.append('Shoot Category', formData.shootCategory);
-      formDataToSend.append('Photo Code', photoCode);
-      formDataToSend.append('Additional Contacts', formattedContacts);
-      formDataToSend.append('Phone Number', formData.phoneNumber);
-      formDataToSend.append('Notes', formData.notes);
+      // Format additional contacts
+      const formattedContacts = formData.additionalContacts
+        .filter(contact => contact.trim() !== '')
+        .join(', ');
       
-      // Send data to Google Sheets
-      fetch('https://script.google.com/macros/s/AKfycbzx4eJsW8gOj8hYK3xsMlbbVaLDXy6vgBpFxiH3WXqQnOyMR-fi8mIBwAVKB2n1xRN1/exec', {
+      // Create form data
+      const formToSubmit = new FormData();
+      formToSubmit.append('Full Name', formData.fullName);
+      formToSubmit.append('Email', formData.email);
+      formToSubmit.append('Shoot Category', formData.shootCategory === 'individual' ? 'Individual Portrait' : 'Group Portrait');
+      formToSubmit.append('Photo Code', photoCode);
+      formToSubmit.append('Additional Emails', formattedContacts);
+      formToSubmit.append('Phone Number', formData.phoneNumber);
+      formToSubmit.append('Notes', formData.notes);
+      
+      console.log("Form data prepared:", {
+        name: formData.fullName,
+        email: formData.email,
+        category: formData.shootCategory,
+        code: photoCode
+      });
+      
+      // Log the URL you're submitting to
+      console.log("Submitting to URL:", 'YOUR_GOOGLE_SCRIPT_URL');
+      
+      // Submit the form data to Google Sheets
+      fetch('YOUR_GOOGLE_SCRIPT_URL', {
         method: 'POST',
-        body: formDataToSend
+        body: formToSubmit
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log("Raw response:", response);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
-        console.log('Success:', data);
+        console.log('Success response data:', data);
         setIsSubmitted(true);
+        setIsSubmitting(false);
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error('Error details:', error);
         alert('There was an error submitting your form. Please try again.');
+        setIsSubmitting(false);
       });
     }
   };
