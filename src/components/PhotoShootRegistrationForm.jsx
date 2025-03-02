@@ -27,14 +27,21 @@ const PhotoShootRegistrationForm = () => {
       textAlign: 'center',
       marginBottom: '20px'
     },
-    title: {
-      fontSize: '24px',
+    mainTitle: {
+      fontSize: '28px',
       fontWeight: 'bold',
       margin: '0 0 8px 0'
+    },
+    subTitle: {
+      fontSize: '22px',
+      fontWeight: 'bold',
+      margin: '0 0 8px 0',
+      color: '#444'
     },
     price: {
       fontSize: '18px',
       color: '#22c55e', // green color
+      marginTop: '5px',
       marginBottom: '20px',
       fontWeight: 'bold'
     },
@@ -337,7 +344,8 @@ const PhotoShootRegistrationForm = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 style={styles.title}>Photo Shoot Registration</h1>
+        <h1 style={styles.mainTitle}>Watlie Studios</h1>
+        <h2 style={styles.subTitle}>Photo Shoot Registration</h2>
         <div style={styles.price}>$30</div>
       </div>
 
