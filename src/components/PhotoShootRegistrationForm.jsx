@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// No need to import Lucide icons if they're not working
 import { AlertCircle, Camera, Check } from 'lucide-react';
-
 
 const PhotoShootRegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -153,171 +151,41 @@ const PhotoShootRegistrationForm = () => {
     }
   };
 
-  const styles = {
-    container: {
-      maxWidth: '600px',
-      margin: '0 auto',
-      padding: '2rem',
-      backgroundColor: 'white',
-      borderRadius: '0.5rem',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-    },
-    header: {
-      textAlign: 'center',
-      marginBottom: '2rem'
-    },
-    title: {
-      fontSize: '2rem',
-      fontWeight: 'bold',
-      marginBottom: '0.5rem'
-    },
-    price: {
-      display: 'inline-block',
-      backgroundColor: '#ebf5ff',
-      color: '#3b82f6',
-      padding: '0.5rem 1rem',
-      borderRadius: '0.375rem',
-      fontWeight: '600',
-      marginTop: '0.5rem'
-    },
-    formGroup: {
-      marginBottom: '1.5rem'
-    },
-    label: {
-      display: 'block',
-      fontWeight: '500',
-      marginBottom: '0.5rem'
-    },
-    required: {
-      color: '#ef4444'
-    },
-    input: {
-      width: '100%',
-      padding: '0.75rem',
-      border: '1px solid #d1d5db',
-      borderRadius: '0.375rem'
-    },
-    errorInput: {
-      borderColor: '#ef4444'
-    },
-    errorMessage: {
-      color: '#ef4444',
-      fontSize: '0.875rem',
-      marginTop: '0.25rem'
-    },
-    radioGroup: {
-      marginTop: '0.5rem'
-    },
-    radioLabel: {
-      display: 'flex',
-      alignItems: 'center',
-      marginBottom: '0.5rem'
-    },
-    radio: {
-      marginRight: '0.5rem'
-    },
-    photoCode: {
-      padding: '1rem',
-      backgroundColor: '#f9fafb',
-      borderRadius: '0.375rem',
-      marginBottom: '1.5rem'
-    },
-    codeDisplay: {
-      fontFamily: 'monospace',
-      fontSize: '1.125rem',
-      fontWeight: '600',
-      letterSpacing: '0.05em'
-    },
-    contactRow: {
-      display: 'flex',
-      marginBottom: '0.5rem'
-    },
-    removeBtn: {
-      marginLeft: '0.5rem',
-      padding: '0.5rem',
-      backgroundColor: '#fee2e2',
-      color: '#dc2626',
-      borderRadius: '0.375rem'
-    },
-    addBtn: {
-      marginTop: '0.5rem',
-      color: '#3b82f6',
-      fontWeight: '500',
-      fontSize: '0.875rem'
-    },
-    submitBtn: {
-      width: '100%',
-      backgroundColor: '#2563eb',
-      color: 'white',
-      padding: '0.75rem',
-      borderRadius: '0.375rem',
-      fontWeight: '500',
-      cursor: 'pointer'
-    },
-    // Thank you page styles
-    thankYouContainer: {
-      maxWidth: '600px',
-      margin: '0 auto',
-      backgroundColor: 'white',
-      padding: '2rem',
-      borderRadius: '0.5rem',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      textAlign: 'center'
-    },
-    thankYouTitle: {
-      fontSize: '1.5rem',
-      fontWeight: 'bold',
-      marginBottom: '1rem'
-    },
-    codeBox: {
-      backgroundColor: '#f9fafb',
-      padding: '1rem',
-      borderRadius: '0.5rem',
-      marginBottom: '1.5rem'
-    },
-    codeLabel: {
-      fontSize: '0.875rem',
-      color: '#6b7280',
-      marginBottom: '0.25rem'
-    },
-    finalCode: {
-      fontSize: '1.875rem',
-      fontFamily: 'monospace',
-      fontWeight: 'bold',
-      letterSpacing: '0.1em'
-    }
-  };
-
   if (isSubmitted) {
     return (
-      <div style={styles.thankYouContainer}>
-        <h2 style={styles.thankYouTitle}>Thank You!</h2>
-        <p style={{marginBottom: '1.5rem'}}>Your photo request has been submitted.</p>
-        <div style={styles.codeBox}>
-          <p style={styles.codeLabel}>Here is your photo code:</p>
-          <p style={styles.finalCode}>{photoCode}</p>
+      <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 mb-4">
+            <Check className="h-6 w-6 text-green-600" />
+          </div>
+          <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
+          <p className="mb-6">Your photo request has been submitted.</p>
+          <div className="bg-gray-100 p-4 rounded-lg mb-6">
+            <p className="text-sm text-gray-500 mb-1">Here is your photo code:</p>
+            <p className="text-3xl font-mono font-bold tracking-wider">{photoCode}</p>
+          </div>
+          <p className="text-sm text-gray-600">Please show this code to your photographer.</p>
         </div>
-        <p style={{fontSize: '0.875rem', color: '#6b7280'}}>Please show this code to your photographer.</p>
       </div>
     );
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        {/* Use a simple text character instead of the Camera icon */}
-        <div style={{fontSize: '2rem', marginBottom: '0.5rem'}}>📷</div>
-        <h1 style={styles.title}>Photo Shoot Registration</h1>
-        <div style={styles.price}>
+    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+      <div className="text-center mb-6">
+        <Camera className="w-12 h-12 mx-auto text-blue-500 mb-2" />
+        <h1 className="text-3xl font-bold text-gray-800">Watlie Studios</h1>
+        <h2 className="text-xl font-medium text-gray-600 mt-1">Photo Shoot Registration</h2>
+        <div className="mt-3 bg-blue-50 text-blue-700 py-2 px-6 rounded-full inline-block font-semibold shadow-sm">
           $30
         </div>
       </div>
 
       <form onSubmit={handleSubmit}>
         {/* Full Name */}
-        <div style={styles.formGroup}>
-          <label htmlFor="fullName" style={styles.label}>
-            Full Name <span style={styles.required}>*</span>
+        <div className="mb-4">
+          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
+            Full Name <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -325,21 +193,20 @@ const PhotoShootRegistrationForm = () => {
             name="fullName"
             value={formData.fullName}
             onChange={handleInputChange}
-            style={{
-              ...styles.input,
-              ...(errors.fullName ? styles.errorInput : {})
-            }}
+            className={`w-full p-2 border rounded-md ${errors.fullName ? 'border-red-500' : 'border-gray-300'}`}
             placeholder="Enter your full name"
           />
           {errors.fullName && (
-            <p style={styles.errorMessage}>{errors.fullName}</p>
+            <p className="mt-1 text-sm text-red-500 flex items-center">
+              <AlertCircle className="w-4 h-4 mr-1" /> {errors.fullName}
+            </p>
           )}
         </div>
 
         {/* Email Address */}
-        <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.label}>
-            Email Address <span style={styles.required}>*</span>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            Email Address <span className="text-red-500">*</span>
           </label>
           <input
             type="email"
@@ -347,83 +214,83 @@ const PhotoShootRegistrationForm = () => {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            style={{
-              ...styles.input,
-              ...(errors.email ? styles.errorInput : {})
-            }}
+            className={`w-full p-2 border rounded-md ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
             placeholder="Enter your email"
           />
           {errors.email && (
-            <p style={styles.errorMessage}>{errors.email}</p>
+            <p className="mt-1 text-sm text-red-500 flex items-center">
+              <AlertCircle className="w-4 h-4 mr-1" /> {errors.email}
+            </p>
           )}
         </div>
 
         {/* Shoot Category */}
-        <div style={styles.formGroup}>
-          <label style={styles.label}>
-            Shoot Category <span style={styles.required}>*</span>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Shoot Category <span className="text-red-500">*</span>
           </label>
-          <div style={styles.radioGroup}>
-            <label style={styles.radioLabel}>
+          <div className="space-y-2">
+            <label className="flex items-center">
               <input
                 type="radio"
                 name="shootCategory"
                 value="individual"
                 checked={formData.shootCategory === 'individual'}
                 onChange={handleInputChange}
-                style={styles.radio}
+                className="mr-2"
               />
               <span>Individual Portrait</span>
             </label>
-            <label style={styles.radioLabel}>
+            <label className="flex items-center">
               <input
                 type="radio"
                 name="shootCategory"
                 value="group"
                 checked={formData.shootCategory === 'group'}
                 onChange={handleInputChange}
-                style={styles.radio}
+                className="mr-2"
               />
               <span>Group Portrait</span>
             </label>
           </div>
           {errors.shootCategory && (
-            <p style={styles.errorMessage}>{errors.shootCategory}</p>
+            <p className="mt-1 text-sm text-red-500 flex items-center">
+              <AlertCircle className="w-4 h-4 mr-1" /> {errors.shootCategory}
+            </p>
           )}
         </div>
 
         {/* Photo Code (displayed but not editable) */}
         {photoCode && (
-          <div style={styles.photoCode}>
-            <label style={styles.label}>
+          <div className="mb-4 p-3 bg-gray-50 rounded-md">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Photo Code (auto-generated)
             </label>
-            <div style={styles.codeDisplay}>{photoCode}</div>
+            <div className="font-mono text-lg font-semibold tracking-wider">{photoCode}</div>
           </div>
         )}
 
         {/* Additional Contact Information */}
-        <div style={styles.formGroup}>
-          <label style={styles.label}>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Additional Email Contacts
           </label>
           {formData.additionalContacts.map((contact, index) => (
-            <div key={index} style={styles.contactRow}>
+            <div key={index} className="flex mb-2">
               <input
                 type="email"
                 value={contact}
                 onChange={(e) => handleAdditionalContactChange(index, e.target.value)}
-                style={{
-                  ...styles.input,
-                  ...(errors[`additionalContact${index}`] ? styles.errorInput : {})
-                }}
+                className={`flex-grow p-2 border rounded-md ${
+                  errors[`additionalContact${index}`] ? 'border-red-500' : 'border-gray-300'
+                }`}
                 placeholder="Additional email contact"
               />
               {index > 0 && (
                 <button
                   type="button"
                   onClick={() => removeContactField(index)}
-                  style={styles.removeBtn}
+                  className="ml-2 p-2 bg-red-100 text-red-600 rounded-md"
                 >
                   Remove
                 </button>
@@ -431,22 +298,23 @@ const PhotoShootRegistrationForm = () => {
             </div>
           ))}
           {errors[`additionalContact${formData.additionalContacts.length - 1}`] && (
-            <p style={styles.errorMessage}>
+            <p className="mt-1 text-sm text-red-500 flex items-center">
+              <AlertCircle className="w-4 h-4 mr-1" />
               {errors[`additionalContact${formData.additionalContacts.length - 1}`]}
             </p>
           )}
           <button
             type="button"
             onClick={addContactField}
-            style={styles.addBtn}
+            className="mt-2 text-sm text-blue-600 font-medium"
           >
             + Add another email contact
           </button>
         </div>
 
         {/* Phone Number */}
-        <div style={styles.formGroup}>
-          <label htmlFor="phoneNumber" style={styles.label}>
+        <div className="mb-4">
+          <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
             Phone Number (Optional)
           </label>
           <input
@@ -455,14 +323,14 @@ const PhotoShootRegistrationForm = () => {
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleInputChange}
-            style={styles.input}
+            className="w-full p-2 border border-gray-300 rounded-md"
             placeholder="Enter your phone number"
           />
         </div>
 
         {/* Notes */}
-        <div style={styles.formGroup}>
-          <label htmlFor="notes" style={styles.label}>
+        <div className="mb-6">
+          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
             Notes (Optional)
           </label>
           <textarea
@@ -471,7 +339,7 @@ const PhotoShootRegistrationForm = () => {
             value={formData.notes}
             onChange={handleInputChange}
             rows="3"
-            style={styles.input}
+            className="w-full p-2 border border-gray-300 rounded-md"
             placeholder="Any special requests for your shoot"
           ></textarea>
         </div>
@@ -480,7 +348,7 @@ const PhotoShootRegistrationForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white py-3 rounded-md font-medium hover:bg-blue-700 transition-colors disabled:bg-blue-400"
+          className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 transition-colors shadow-md transform hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center text-lg"
         >
           {isSubmitting ? 'Submitting...' : 'Submit Registration'}
         </button>
