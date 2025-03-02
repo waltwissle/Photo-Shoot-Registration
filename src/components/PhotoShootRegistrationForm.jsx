@@ -1,23 +1,172 @@
 import React, { useState, useEffect } from 'react';
-import { AlertCircle, Camera, Check } from 'lucide-react';
 
 const PhotoShootRegistrationForm = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     shootCategory: '',
-    additionalContacts: [''],
+    additionalEmails: [''],
     phoneNumber: '',
-    notes: '',
+    notes: ''
   });
   
   const [photoCode, setPhotoCode] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  // Generate a unique 5-digit alphanumeric code
-  const generateUniqueCode = () => {
+  // Styles
+  const styles = {
+    container: {
+      maxWidth: '600px',
+      margin: '0 auto',
+      padding: '20px',
+      fontFamily: 'Arial, sans-serif'
+    },
+    header: {
+      textAlign: 'center',
+      marginBottom: '20px'
+    },
+    title: {
+      fontSize: '24px',
+      fontWeight: 'bold',
+      margin: '0 0 8px 0'
+    },
+    price: {
+      fontSize: '18px',
+      color: '#22c55e', // green color
+      marginBottom: '20px',
+      fontWeight: 'bold'
+    },
+    formGroup: {
+      marginBottom: '20px',
+      textAlign: 'left' // Ensure all form groups align left
+    },
+    label: {
+      display: 'block',
+      marginBottom: '8px',
+      fontWeight: 'bold',
+      textAlign: 'left' // Left-align all labels
+    },
+    required: {
+      color: 'red'
+    },
+    input: {
+      width: '100%',
+      padding: '10px',
+      fontSize: '16px',
+      border: '1px solid #ddd',
+      borderRadius: '4px',
+      boxSizing: 'border-box'
+    },
+    select: {
+      width: '100%',
+      padding: '10px',
+      fontSize: '16px',
+      border: '1px solid #ddd',
+      borderRadius: '4px',
+      boxSizing: 'border-box',
+      backgroundColor: 'white',
+      appearance: 'none',
+      backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'right .7em top 50%',
+      backgroundSize: '.65em auto',
+      paddingRight: '1.4em'
+    },
+    error: {
+      color: 'red',
+      fontSize: '14px',
+      marginTop: '5px',
+      textAlign: 'left' // Left-align error messages
+    },
+    addButton: {
+      color: '#3b82f6', // blue color
+      backgroundColor: 'transparent',
+      border: 'none',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      display: 'inline-block',
+      fontSize: '14px',
+      padding: '5px 0',
+      fontWeight: 'bold',
+      textAlign: 'left' // Left-align the add button
+    },
+    removeButton: {
+      marginLeft: '8px',
+      padding: '0 10px',
+      backgroundColor: '#fee2e2',
+      color: '#dc2626',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      height: '38px'
+    },
+    inputContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '10px'
+    },
+    textarea: {
+      width: '100%',
+      padding: '10px',
+      fontSize: '16px',
+      border: '1px solid #ddd',
+      borderRadius: '4px',
+      boxSizing: 'border-box',
+      minHeight: '100px',
+      fontFamily: 'Arial, sans-serif'
+    },
+    submitButton: {
+      width: '100%',
+      padding: '12px',
+      fontSize: '16px',
+      color: 'white',
+      backgroundColor: '#3b82f6', // blue color
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      fontWeight: 'bold'
+    },
+    disabledButton: {
+      backgroundColor: '#93c5fd', // lighter blue
+      cursor: 'not-allowed'
+    },
+    successContainer: {
+      textAlign: 'center',
+      padding: '30px'
+    },
+    successTitle: {
+      fontSize: '24px',
+      fontWeight: 'bold',
+      marginBottom: '16px'
+    },
+    codeBox: {
+      backgroundColor: '#f9fafb',
+      padding: '16px',
+      borderRadius: '8px',
+      marginBottom: '24px',
+      border: '1px solid #ddd'
+    },
+    codeBig: {
+      fontSize: '24px',
+      fontWeight: 'bold',
+      fontFamily: 'monospace',
+      margin: '10px 0'
+    },
+    resetButton: {
+      padding: '10px 20px',
+      backgroundColor: '#3b82f6',
+      color: 'white',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      fontWeight: 'bold'
+    }
+  };
+
+  // Generate random alphanumeric code
+  const generateAlphanumericCode = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     for (let i = 0; i < 5; i++) {
@@ -30,70 +179,71 @@ const PhotoShootRegistrationForm = () => {
   useEffect(() => {
     if (formData.shootCategory) {
       const prefix = formData.shootCategory === 'individual' ? 'WS-I-' : 'WS-G-';
-      setPhotoCode(prefix + generateUniqueCode());
+      setPhotoCode(prefix + generateAlphanumericCode());
     }
   }, [formData.shootCategory]);
 
-  const handleInputChange = (e) => {
+  // Handle input changes
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value
     });
   };
 
-  const handleAdditionalContactChange = (index, value) => {
-    const updatedContacts = [...formData.additionalContacts];
-    updatedContacts[index] = value;
+  // Handle additional email changes
+  const handleAdditionalEmailChange = (index, value) => {
+    const newAdditionalEmails = [...formData.additionalEmails];
+    newAdditionalEmails[index] = value;
     setFormData({
       ...formData,
-      additionalContacts: updatedContacts,
+      additionalEmails: newAdditionalEmails
     });
   };
 
-  const addContactField = () => {
+  // Add additional email field
+  const addEmailField = () => {
     setFormData({
       ...formData,
-      additionalContacts: [...formData.additionalContacts, ''],
+      additionalEmails: [...formData.additionalEmails, '']
     });
   };
 
-  const removeContactField = (index) => {
-    const updatedContacts = formData.additionalContacts.filter((_, i) => i !== index);
-    setFormData({
-      ...formData,
-      additionalContacts: updatedContacts,
-    });
+  // Remove additional email field
+  const removeEmailField = (index) => {
+    if (formData.additionalEmails.length > 1) {
+      const newAdditionalEmails = [...formData.additionalEmails];
+      newAdditionalEmails.splice(index, 1);
+      setFormData({
+        ...formData,
+        additionalEmails: newAdditionalEmails
+      });
+    }
   };
 
+  // Form validation
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
-    }
+    // Required fields validation
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+    if (!formData.shootCategory) newErrors.shootCategory = 'Please select a shoot category';
     
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    
-    if (!formData.shootCategory) {
-      newErrors.shootCategory = 'Please select a shoot category';
-    }
-    
-    // Validate additional contacts if they're not empty
-    formData.additionalContacts.forEach((contact, index) => {
-      if (contact && !/\S+@\S+\.\S+/.test(contact)) {
-        newErrors[`additionalContact${index}`] = 'Email is invalid';
+    // Additional emails validation
+    formData.additionalEmails.forEach((email, index) => {
+      if (email && !/\S+@\S+\.\S+/.test(email)) {
+        newErrors[`additionalEmail${index}`] = 'Email is invalid';
       }
     });
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     
@@ -102,8 +252,8 @@ const PhotoShootRegistrationForm = () => {
       console.log("Form validated, preparing to submit");
       
       // Format additional contacts
-      const formattedContacts = formData.additionalContacts
-        .filter(contact => contact.trim() !== '')
+      const formattedContacts = formData.additionalEmails
+        .filter(email => email.trim() !== '')
         .join(', ');
       
       // Create form data
@@ -140,7 +290,7 @@ const PhotoShootRegistrationForm = () => {
       })
       .then(data => {
         console.log('Success response data:', data);
-        setIsSubmitted(true);
+        setSubmitted(true);
         setIsSubmitting(false);
       })
       .catch(error => {
@@ -151,196 +301,195 @@ const PhotoShootRegistrationForm = () => {
     }
   };
 
-  if (isSubmitted) {
+  if (submitted) {
     return (
-      <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
-        <div className="text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 mb-4">
-            <Check className="h-6 w-6 text-green-600" />
+      <div style={styles.container}>
+        <div style={styles.successContainer}>
+          <h2 style={styles.successTitle}>Thank You!</h2>
+          <p style={{marginBottom: '20px'}}>Your photo request has been submitted.</p>
+          <div style={styles.codeBox}>
+            <p style={{marginBottom: '5px'}}>Here is your photo code:</p>
+            <p style={styles.codeBig}>{photoCode}</p>
+            <p style={{fontSize: '14px'}}>Please show this code to your photographer.</p>
           </div>
-          <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
-          <p className="mb-6">Your photo request has been submitted.</p>
-          <div className="bg-gray-100 p-4 rounded-lg mb-6">
-            <p className="text-sm text-gray-500 mb-1">Here is your photo code:</p>
-            <p className="text-3xl font-mono font-bold tracking-wider">{photoCode}</p>
-          </div>
-          <p className="text-sm text-gray-600">Please show this code to your photographer.</p>
+          <button
+            onClick={() => {
+              setSubmitted(false);
+              setFormData({
+                fullName: '',
+                email: '',
+                shootCategory: '',
+                additionalEmails: [''],
+                phoneNumber: '',
+                notes: ''
+              });
+              setPhotoCode('');
+            }}
+            style={styles.resetButton}
+          >
+            Register Another
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-      <div className="text-center mb-6">
-        <Camera className="w-12 h-12 mx-auto text-blue-500 mb-2" />
-        <h1 className="text-3xl font-bold text-gray-800">Watlie Studios</h1>
-        <h2 className="text-xl font-medium text-gray-600 mt-1">Photo Shoot Registration</h2>
-        <div className="mt-3 bg-blue-50 text-blue-700 py-2 px-6 rounded-full inline-block font-semibold shadow-sm">
-          $30
-        </div>
+    <div style={styles.container}>
+      <div style={styles.header}>
+        <h1 style={styles.title}>Photo Shoot Registration</h1>
+        <div style={styles.price}>$30</div>
       </div>
 
       <form onSubmit={handleSubmit}>
         {/* Full Name */}
-        <div className="mb-4">
-          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name <span className="text-red-500">*</span>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="fullName">
+            Full Name <span style={styles.required}>*</span>
           </label>
           <input
+            style={{
+              ...styles.input,
+              ...(errors.fullName && {borderColor: 'red'})
+            }}
             type="text"
             id="fullName"
             name="fullName"
             value={formData.fullName}
-            onChange={handleInputChange}
-            className={`w-full p-2 border rounded-md ${errors.fullName ? 'border-red-500' : 'border-gray-300'}`}
+            onChange={handleChange}
             placeholder="Enter your full name"
           />
-          {errors.fullName && (
-            <p className="mt-1 text-sm text-red-500 flex items-center">
-              <AlertCircle className="w-4 h-4 mr-1" /> {errors.fullName}
-            </p>
-          )}
+          {errors.fullName && <p style={styles.error}>{errors.fullName}</p>}
         </div>
 
-        {/* Email Address */}
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email Address <span className="text-red-500">*</span>
+        {/* Email */}
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="email">
+            Email Address <span style={styles.required}>*</span>
           </label>
           <input
+            style={{
+              ...styles.input,
+              ...(errors.email && {borderColor: 'red'})
+            }}
             type="email"
             id="email"
             name="email"
             value={formData.email}
-            onChange={handleInputChange}
-            className={`w-full p-2 border rounded-md ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+            onChange={handleChange}
             placeholder="Enter your email"
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500 flex items-center">
-              <AlertCircle className="w-4 h-4 mr-1" /> {errors.email}
-            </p>
-          )}
+          {errors.email && <p style={styles.error}>{errors.email}</p>}
         </div>
 
         {/* Shoot Category */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Shoot Category <span className="text-red-500">*</span>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="shootCategory">
+            Shoot Category <span style={styles.required}>*</span>
           </label>
-          <div className="space-y-2">
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="shootCategory"
-                value="individual"
-                checked={formData.shootCategory === 'individual'}
-                onChange={handleInputChange}
-                className="mr-2"
-              />
-              <span>Individual Portrait</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="shootCategory"
-                value="group"
-                checked={formData.shootCategory === 'group'}
-                onChange={handleInputChange}
-                className="mr-2"
-              />
-              <span>Group Portrait</span>
-            </label>
-          </div>
-          {errors.shootCategory && (
-            <p className="mt-1 text-sm text-red-500 flex items-center">
-              <AlertCircle className="w-4 h-4 mr-1" /> {errors.shootCategory}
-            </p>
-          )}
+          <select
+            style={{
+              ...styles.select,
+              ...(errors.shootCategory && {borderColor: 'red'})
+            }}
+            id="shootCategory"
+            name="shootCategory"
+            value={formData.shootCategory}
+            onChange={handleChange}
+          >
+            <option value="">Select a category</option>
+            <option value="individual">Individual Portrait</option>
+            <option value="group">Group Portrait</option>
+          </select>
+          {errors.shootCategory && <p style={styles.error}>{errors.shootCategory}</p>}
         </div>
 
-        {/* Photo Code (displayed but not editable) */}
+        {/* Photo Code - Auto-generated and read-only */}
         {photoCode && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-md">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Photo Code (auto-generated)
+          <div style={styles.formGroup}>
+            <label style={styles.label} htmlFor="photoCode">
+              Photo Code
             </label>
-            <div className="font-mono text-lg font-semibold tracking-wider">{photoCode}</div>
+            <input
+              style={{...styles.input, backgroundColor: '#f9fafb'}}
+              id="photoCode"
+              type="text"
+              value={photoCode}
+              readOnly
+            />
           </div>
         )}
 
-        {/* Additional Contact Information */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        {/* Additional Email Contacts */}
+        <div style={styles.formGroup}>
+          <label style={styles.label}>
             Additional Email Contacts
           </label>
-          {formData.additionalContacts.map((contact, index) => (
-            <div key={index} className="flex mb-2">
-              <input
-                type="email"
-                value={contact}
-                onChange={(e) => handleAdditionalContactChange(index, e.target.value)}
-                className={`flex-grow p-2 border rounded-md ${
-                  errors[`additionalContact${index}`] ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Additional email contact"
-              />
-              {index > 0 && (
-                <button
-                  type="button"
-                  onClick={() => removeContactField(index)}
-                  className="ml-2 p-2 bg-red-100 text-red-600 rounded-md"
-                >
-                  Remove
-                </button>
-              )}
+          {formData.additionalEmails.map((email, index) => (
+            <div key={index}>
+              <div style={styles.inputContainer}>
+                <input
+                  style={{
+                    ...styles.input,
+                    ...(errors[`additionalEmail${index}`] && {borderColor: 'red'})
+                  }}
+                  type="email"
+                  value={email}
+                  onChange={(e) => handleAdditionalEmailChange(index, e.target.value)}
+                  placeholder="Additional email contact"
+                />
+                {index > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => removeEmailField(index)}
+                    style={styles.removeButton}
+                  >
+                    -
+                  </button>
+                )}
+              </div>
+              {errors[`additionalEmail${index}`] && 
+                <p style={styles.error}>{errors[`additionalEmail${index}`]}</p>
+              }
             </div>
           ))}
-          {errors[`additionalContact${formData.additionalContacts.length - 1}`] && (
-            <p className="mt-1 text-sm text-red-500 flex items-center">
-              <AlertCircle className="w-4 h-4 mr-1" />
-              {errors[`additionalContact${formData.additionalContacts.length - 1}`]}
-            </p>
-          )}
           <button
             type="button"
-            onClick={addContactField}
-            className="mt-2 text-sm text-blue-600 font-medium"
+            onClick={addEmailField}
+            style={styles.addButton}
           >
-            + Add another email contact
+            + Add another email
           </button>
         </div>
 
-        {/* Phone Number */}
-        <div className="mb-4">
-          <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+        {/* Phone Number (Optional) */}
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="phoneNumber">
             Phone Number (Optional)
           </label>
           <input
+            style={styles.input}
             type="tel"
             id="phoneNumber"
             name="phoneNumber"
             value={formData.phoneNumber}
-            onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            onChange={handleChange}
             placeholder="Enter your phone number"
           />
         </div>
 
-        {/* Notes */}
-        <div className="mb-6">
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
+        {/* Notes (Optional) */}
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="notes">
             Notes (Optional)
           </label>
           <textarea
+            style={styles.textarea}
             id="notes"
             name="notes"
             value={formData.notes}
-            onChange={handleInputChange}
-            rows="3"
-            className="w-full p-2 border border-gray-300 rounded-md"
-            placeholder="Any special requests for your shoot"
+            onChange={handleChange}
+            placeholder="Any special requests for your photo shoot..."
           ></textarea>
         </div>
 
@@ -348,7 +497,10 @@ const PhotoShootRegistrationForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 transition-colors shadow-md transform hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center text-lg"
+          style={{
+            ...styles.submitButton,
+            ...(isSubmitting && styles.disabledButton)
+          }}
         >
           {isSubmitting ? 'Submitting...' : 'Submit Registration'}
         </button>
