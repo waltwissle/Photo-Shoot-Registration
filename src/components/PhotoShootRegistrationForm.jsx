@@ -20,124 +20,149 @@ const PhotoShootRegistrationForm = () => {
     container: {
       maxWidth: '600px',
       margin: '0 auto',
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif'
+      padding: '30px 20px',
+      fontFamily: 'Arial, sans-serif',
+      backgroundColor: 'white',
+      borderRadius: '12px',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
     },
     header: {
       textAlign: 'center',
-      marginBottom: '20px'
+      marginBottom: '30px'
     },
     mainTitle: {
-      fontSize: '28px',
+      fontSize: '30px',
       fontWeight: 'bold',
-      margin: '0 0 8px 0'
+      margin: '0 0 8px 0',
+      color: '#2563eb'
     },
     subTitle: {
       fontSize: '22px',
       fontWeight: 'bold',
       margin: '0 0 8px 0',
-      color: '#444'
+      color: '#4b5563'
     },
     price: {
       fontSize: '18px',
-      color: '#22c55e', // green color
-      marginTop: '5px',
-      marginBottom: '20px',
-      fontWeight: 'bold'
+      color: '#10b981', // green color
+      marginTop: '8px',
+      marginBottom: '5px',
+      fontWeight: 'bold',
+      display: 'inline-block',
+      padding: '5px 12px',
+      backgroundColor: '#d1fae5',
+      borderRadius: '20px'
     },
     formGroup: {
-      marginBottom: '20px',
-      textAlign: 'left' // Ensure all form groups align left
+      marginBottom: '24px',
+      textAlign: 'left'
     },
     label: {
       display: 'block',
       marginBottom: '8px',
-      fontWeight: 'bold',
-      textAlign: 'left' // Left-align all labels
+      fontWeight: '500',
+      textAlign: 'left',
+      fontSize: '15px',
+      color: '#4b5563'
     },
     required: {
-      color: 'red'
+      color: '#ef4444',
+      marginLeft: '3px'
     },
     input: {
       width: '100%',
-      padding: '10px',
+      padding: '12px 16px',
       fontSize: '16px',
-      border: '1px solid #ddd',
-      borderRadius: '4px',
-      boxSizing: 'border-box'
+      border: '1px solid #d1d5db',
+      borderRadius: '8px',
+      boxSizing: 'border-box',
+      transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+      outline: 'none'
     },
     select: {
       width: '100%',
-      padding: '10px',
+      padding: '12px 16px',
       fontSize: '16px',
-      border: '1px solid #ddd',
-      borderRadius: '4px',
+      border: '1px solid #d1d5db',
+      borderRadius: '8px',
       boxSizing: 'border-box',
       backgroundColor: 'white',
       appearance: 'none',
       backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")',
       backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'right .7em top 50%',
+      backgroundPosition: 'right 1em top 50%',
       backgroundSize: '.65em auto',
-      paddingRight: '1.4em'
+      paddingRight: '2.5em',
+      transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+      outline: 'none'
     },
     error: {
-      color: 'red',
+      color: '#ef4444',
       fontSize: '14px',
-      marginTop: '5px',
-      textAlign: 'left' // Left-align error messages
+      marginTop: '6px',
+      textAlign: 'left'
     },
     addButton: {
-      color: '#3b82f6', // blue color
+      color: '#2563eb',
       backgroundColor: 'transparent',
       border: 'none',
       cursor: 'pointer',
       textDecoration: 'none',
-      display: 'inline-block',
+      display: 'inline-flex',
+      alignItems: 'center',
       fontSize: '14px',
-      padding: '5px 0',
-      fontWeight: 'bold',
-      textAlign: 'left' // Left-align the add button
+      padding: '8px 0',
+      fontWeight: '600',
+      textAlign: 'left'
     },
     removeButton: {
       marginLeft: '8px',
-      padding: '0 10px',
+      padding: '0 12px',
       backgroundColor: '#fee2e2',
       color: '#dc2626',
       border: 'none',
-      borderRadius: '4px',
+      borderRadius: '6px',
       cursor: 'pointer',
-      height: '38px'
+      height: '42px',
+      fontSize: '16px',
+      fontWeight: 'bold',
+      transition: 'background-color 0.2s ease'
     },
     inputContainer: {
       display: 'flex',
       alignItems: 'center',
-      marginBottom: '10px'
+      marginBottom: '12px'
     },
     textarea: {
       width: '100%',
-      padding: '10px',
+      padding: '12px 16px',
       fontSize: '16px',
-      border: '1px solid #ddd',
-      borderRadius: '4px',
+      border: '1px solid #d1d5db',
+      borderRadius: '8px',
       boxSizing: 'border-box',
-      minHeight: '100px',
-      fontFamily: 'Arial, sans-serif'
+      minHeight: '120px',
+      fontFamily: 'Arial, sans-serif',
+      transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+      outline: 'none'
     },
     submitButton: {
       width: '100%',
-      padding: '12px',
+      padding: '14px',
       fontSize: '16px',
       color: 'white',
-      backgroundColor: '#3b82f6', // blue color
+      backgroundColor: '#2563eb',
       border: 'none',
-      borderRadius: '4px',
+      borderRadius: '8px',
       cursor: 'pointer',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      marginTop: '10px',
+      transition: 'background-color 0.2s ease',
+      boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.3)'
     },
     disabledButton: {
-      backgroundColor: '#93c5fd', // lighter blue
-      cursor: 'not-allowed'
+      backgroundColor: '#93c5fd',
+      cursor: 'not-allowed',
+      boxShadow: 'none'
     },
     successContainer: {
       textAlign: 'center',
@@ -170,6 +195,41 @@ const PhotoShootRegistrationForm = () => {
       borderRadius: '4px',
       cursor: 'pointer',
       fontWeight: 'bold'
+    },
+    formDivider: {
+      margin: '32px 0',
+      height: '1px',
+      backgroundColor: '#e5e7eb',
+      position: 'relative'
+    },
+    formDividerText: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      backgroundColor: 'white',
+      padding: '0 10px',
+      color: '#6b7280',
+      fontSize: '14px'
+    },
+    inputFocus: {
+      borderColor: '#3b82f6',
+      boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.25)'
+    },
+    formSection: {
+      marginBottom: '30px',
+      padding: '24px',
+      borderRadius: '10px',
+      backgroundColor: '#f9fafb',
+      border: '1px solid #e5e7eb'
+    },
+    formSectionTitle: {
+      fontSize: '18px',
+      fontWeight: '600',
+      marginBottom: '20px',
+      color: '#4b5563',
+      borderBottom: '1px solid #e5e7eb',
+      paddingBottom: '10px'
     }
   };
 
