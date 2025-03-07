@@ -312,34 +312,108 @@ const PhotoShootRegistrationForm = () => {
   if (submitted) {
     return (
       <div style={styles.container}>
-        <div style={styles.successContainer}>
-          <h2 style={styles.successTitle}>Thank You!</h2>
-          
-          {/* Summary Section */}
-          <div style={{textAlign: 'left', marginBottom: '30px', padding: '20px', border: '1px solid #e5e7eb', borderRadius: '8px', backgroundColor: '#f9fafb'}}>
-            <h3 style={{fontSize: '18px', marginBottom: '15px', borderBottom: '1px solid #e5e7eb', paddingBottom: '10px'}}>Submission Summary</h3>
-            <p><strong>Name:</strong> {formData.fullName}</p>
-            <p><strong>Email:</strong> {formData.email}</p>
-            <p><strong>Shoot Type:</strong> {formData.shootCategory === 'individual' ? 'Individual' : 'Group'}</p>
-            {formData.phoneNumber && <p><strong>Phone:</strong> {formData.phoneNumber}</p>}
-            {formData.additionalEmails[0] && formData.additionalEmails[0].trim() !== '' && (
-              <p>
-                <strong>Additional Contacts:</strong>{' '}
-                {formData.additionalEmails
-                  .filter(email => email.trim() !== '')
-                  .join(', ')}
-              </p>
-            )}
-            {formData.notes && <p><strong>Notes:</strong> {formData.notes}</p>}
+        <div style={{...styles.successContainer, maxWidth: '500px', margin: '0 auto'}}>
+          {/* Success Header with Icon */}
+          <div style={{marginBottom: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div style={{
+              backgroundColor: '#dbeafe', 
+              borderRadius: '50%', 
+              width: '70px', 
+              height: '70px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              marginBottom: '16px'
+            }}>
+              <div style={{color: '#2563eb', fontSize: '32px'}}>✓</div>
+            </div>
+            <h2 style={{...styles.successTitle, marginBottom: '8px'}}>Thank You!</h2>
+            <p style={{color: '#4b5563', marginBottom: '5px'}}>Your registration was successful</p>
           </div>
           
-          <div style={styles.codeBox}>
-            <p style={{marginBottom: '5px', fontSize: '16px'}}>
-              <strong>Please show this code to your photographer:</strong>
+          {/* Photo Code Display - Make this stand out */}
+          <div style={{
+            backgroundColor: '#2563eb', 
+            padding: '25px 15px',
+            borderRadius: '12px',
+            marginBottom: '25px',
+            color: 'white',
+            textAlign: 'center',
+            boxShadow: '0 10px 15px -3px rgba(37, 99, 235, 0.3)'
+          }}>
+            <p style={{marginBottom: '10px', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', opacity: '0.9'}}>
+              Your Photo Code
             </p>
-            <p style={{...styles.codeBig, fontSize: '32px', letterSpacing: '2px'}}>{photoCode}</p>
+            <p style={{
+              fontSize: '38px', 
+              fontWeight: 'bold', 
+              letterSpacing: '3px', 
+              margin: '15px 0',
+              fontFamily: 'monospace'
+            }}>{photoCode}</p>
+            <p style={{fontSize: '14px', fontStyle: 'italic'}}>Please show this code to your photographer</p>
           </div>
           
+          {/* Summary Section - Modern Card */}
+          <div style={{
+            textAlign: 'left', 
+            marginBottom: '30px', 
+            padding: '25px', 
+            borderRadius: '12px', 
+            backgroundColor: 'white',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+          }}>
+            <h3 style={{
+              fontSize: '16px', 
+              marginBottom: '20px', 
+              color: '#4b5563', 
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              fontWeight: '600'
+            }}>Registration Details</h3>
+            
+            <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: '12px'}}>
+              <div>
+                <label style={{fontSize: '13px', color: '#6b7280', display: 'block', marginBottom: '4px'}}>Name</label>
+                <p style={{fontSize: '16px', fontWeight: '500'}}>{formData.fullName}</p>
+              </div>
+              
+              <div>
+                <label style={{fontSize: '13px', color: '#6b7280', display: 'block', marginBottom: '4px'}}>Email</label>
+                <p style={{fontSize: '16px'}}>{formData.email}</p>
+              </div>
+              
+              <div>
+                <label style={{fontSize: '13px', color: '#6b7280', display: 'block', marginBottom: '4px'}}>Shoot Type</label>
+                <p style={{fontSize: '16px'}}>
+                  {formData.shootCategory === 'individual' ? 'Individual Portrait' : 'Group Portrait'}
+                </p>
+              </div>
+              
+              {formData.phoneNumber && (
+                <div>
+                  <label style={{fontSize: '13px', color: '#6b7280', display: 'block', marginBottom: '4px'}}>Phone</label>
+                  <p style={{fontSize: '16px'}}>{formData.phoneNumber}</p>
+                </div>
+              )}
+              
+              {formData.additionalEmails[0] && formData.additionalEmails[0].trim() !== '' && (
+                <div>
+                  <label style={{fontSize: '13px', color: '#6b7280', display: 'block', marginBottom: '4px'}}>Additional Contacts</label>
+                  <p style={{fontSize: '16px'}}>{formData.additionalEmails.filter(email => email.trim() !== '').join(', ')}</p>
+                </div>
+              )}
+              
+              {formData.notes && (
+                <div>
+                  <label style={{fontSize: '13px', color: '#6b7280', display: 'block', marginBottom: '4px'}}>Notes</label>
+                  <p style={{fontSize: '16px'}}>{formData.notes}</p>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Register Another Button */}
           <button
             onClick={() => {
               setSubmitted(false);
@@ -353,9 +427,16 @@ const PhotoShootRegistrationForm = () => {
               });
               setPhotoCode('');
             }}
-            style={styles.resetButton}
+            style={{
+              ...styles.resetButton,
+              borderRadius: '8px',
+              padding: '14px 24px',
+              fontWeight: '600',
+              boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.2)',
+              transition: 'all 0.2s ease',
+            }}
           >
-            Register Another
+            Register Another Session
           </button>
         </div>
       </div>
