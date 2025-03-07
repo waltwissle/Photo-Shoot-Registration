@@ -144,9 +144,10 @@ const PhotoShootRegistrationForm = () => {
       padding: '30px'
     },
     successTitle: {
-      fontSize: '24px',
+      fontSize: '28px',
       fontWeight: 'bold',
-      marginBottom: '16px'
+      marginBottom: '20px',
+      color: '#3b82f6'
     },
     codeBox: {
       backgroundColor: '#f9fafb',
@@ -313,12 +314,32 @@ const PhotoShootRegistrationForm = () => {
       <div style={styles.container}>
         <div style={styles.successContainer}>
           <h2 style={styles.successTitle}>Thank You!</h2>
-          <p style={{marginBottom: '20px'}}>Your photo request has been submitted.</p>
-          <div style={styles.codeBox}>
-            <p style={{marginBottom: '5px'}}>Here is your photo code:</p>
-            <p style={styles.codeBig}>{photoCode}</p>
-            <p style={{fontSize: '14px'}}>Please show this code to your photographer.</p>
+          
+          {/* Summary Section */}
+          <div style={{textAlign: 'left', marginBottom: '30px', padding: '20px', border: '1px solid #e5e7eb', borderRadius: '8px', backgroundColor: '#f9fafb'}}>
+            <h3 style={{fontSize: '18px', marginBottom: '15px', borderBottom: '1px solid #e5e7eb', paddingBottom: '10px'}}>Submission Summary</h3>
+            <p><strong>Name:</strong> {formData.fullName}</p>
+            <p><strong>Email:</strong> {formData.email}</p>
+            <p><strong>Shoot Type:</strong> {formData.shootCategory === 'individual' ? 'Individual' : 'Group'}</p>
+            {formData.phoneNumber && <p><strong>Phone:</strong> {formData.phoneNumber}</p>}
+            {formData.additionalEmails[0] && formData.additionalEmails[0].trim() !== '' && (
+              <p>
+                <strong>Additional Contacts:</strong>{' '}
+                {formData.additionalEmails
+                  .filter(email => email.trim() !== '')
+                  .join(', ')}
+              </p>
+            )}
+            {formData.notes && <p><strong>Notes:</strong> {formData.notes}</p>}
           </div>
+          
+          <div style={styles.codeBox}>
+            <p style={{marginBottom: '5px', fontSize: '16px'}}>
+              <strong>Please show this code to your photographer:</strong>
+            </p>
+            <p style={{...styles.codeBig, fontSize: '32px', letterSpacing: '2px'}}>{photoCode}</p>
+          </div>
+          
           <button
             onClick={() => {
               setSubmitted(false);
