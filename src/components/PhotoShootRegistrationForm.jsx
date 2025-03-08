@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
 const PhotoShootRegistrationForm = () => {
+  // Set the document title when component mounts
+  useEffect(() => {
+    document.title = "Photo Shoot Registration";
+    // Cleanup function to reset title if needed
+    return () => {
+      // Optional: reset title on unmount if desired
+      // document.title = "React App";
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
