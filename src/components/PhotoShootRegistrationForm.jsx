@@ -7,7 +7,8 @@ const PhotoShootRegistrationForm = () => {
     shootCategory: '',
     additionalEmails: [''],
     phoneNumber: '',
-    notes: ''
+    notes: '',
+    socialMediaConsent: false
   });
   
   const [photoCode, setPhotoCode] = useState('');
@@ -230,6 +231,53 @@ const PhotoShootRegistrationForm = () => {
       color: '#4b5563',
       borderBottom: '1px solid #e5e7eb',
       paddingBottom: '10px'
+    },
+    checkboxContainer: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      marginBottom: '20px'
+    },
+    checkbox: {
+      marginRight: '10px',
+      marginTop: '3px',
+      width: '18px',
+      height: '18px',
+      accentColor: '#2563eb'
+    },
+    checkboxLabel: {
+      fontSize: '15px',
+      lineHeight: '1.4',
+      color: '#4b5563'
+    },
+    infoNote: {
+      backgroundColor: '#dbeafe',
+      padding: '12px 16px',
+      borderRadius: '8px',
+      marginBottom: '20px',
+      display: 'flex',
+      alignItems: 'flex-start',
+      border: '1px solid #bfdbfe'
+    },
+    infoIcon: {
+      color: '#2563eb',
+      marginRight: '12px',
+      fontSize: '20px',
+      fontWeight: 'bold'
+    },
+    infoText: {
+      fontSize: '14px',
+      color: '#1e40af',
+      lineHeight: '1.5'
+    },
+    footerInfo: {
+      marginTop: '25px',
+      padding: '16px',
+      backgroundColor: '#f3f4f6',
+      borderRadius: '8px',
+      fontSize: '14px',
+      color: '#6b7280',
+      textAlign: 'center',
+      lineHeight: '1.5'
     }
   };
 
@@ -257,6 +305,14 @@ const PhotoShootRegistrationForm = () => {
     setFormData({
       ...formData,
       [name]: value
+    });
+  };
+  
+  // Handle checkbox change
+  const handleCheckboxChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.checked
     });
   };
 
@@ -333,6 +389,8 @@ const PhotoShootRegistrationForm = () => {
       formToSubmit.append('Additional Emails', formattedContacts);
       formToSubmit.append('Phone Number', formData.phoneNumber);
       formToSubmit.append('Notes', formData.notes);
+      formToSubmit.append('Social Media Consent', formData.socialMediaConsent ? 'Yes' : 'No');
+      formToSubmit.append('Submission Date', new Date().toISOString());
       
       console.log("Form data prepared:", {
         name: formData.fullName,
@@ -347,19 +405,34 @@ const PhotoShootRegistrationForm = () => {
       // Submit the form data to Google Sheets
       fetch('https://script.google.com/macros/s/AKfycbwqXTghtGBFkC2djBeN5DdrNtIopj32CoClejRIzLw7uQlPADdsalgaooR5Yg8E1eoP/exec', {
         method: 'POST',
-        body: formToSubmit
+        body: formToSubmit,
+        mode: 'no-cors' // This is important when submitting to Google Scripts
       })
       .then(response => {
-        console.log("Raw response:", response);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Success response data:', data);
+        console.log("Response received:", response);
+        // Since we're using no-cors, we can't access response details
+        // So we'll just assume success if we got any response
         setSubmitted(true);
         setIsSubmitting(false);
+        
+        // Record submission to localStorage for backup
+        try {
+          const submissions = JSON.parse(localStorage.getItem('photoRegistrations') || '[]');
+          submissions.push({
+            timestamp: new Date().toISOString(),
+            name: formData.fullName,
+            email: formData.email,
+            category: formData.shootCategory,
+            code: photoCode,
+            additionalEmails: formData.additionalEmails.filter(email => email.trim() !== ''),
+            phoneNumber: formData.phoneNumber,
+            notes: formData.notes,
+            socialMediaConsent: formData.socialMediaConsent
+          });
+          localStorage.setItem('photoRegistrations', JSON.stringify(submissions));
+        } catch (e) {
+          console.warn('Could not save to localStorage:', e);
+        }
       })
       .catch(error => {
         console.error('Error details:', error);
@@ -504,177 +577,247 @@ const PhotoShootRegistrationForm = () => {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 style={styles.mainTitle}>Watlie Studios</h1>
-        <h2 style={styles.subTitle}>Photo Shoot Registration</h2>
-        <div style={styles.price}>$30</div>
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        {/* Full Name */}
-        <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="fullName">
-            Full Name <span style={styles.required}>*</span>
-          </label>
-          <input
-            style={{
-              ...styles.input,
-              ...(errors.fullName && {borderColor: 'red'})
-            }}
-            type="text"
-            id="fullName"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            placeholder="Enter your full name"
-          />
-          {errors.fullName && <p style={styles.error}>{errors.fullName}</p>}
+    <div style={{
+      backgroundColor: '#f3f4f6',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '30px 15px'
+    }}>
+      <div style={styles.container}>
+        <div style={styles.header}>
+          <h1 style={styles.mainTitle}>Watlie Studios</h1>
+          <h2 style={styles.subTitle}>Photo Shoot Registration</h2>
+          <div style={styles.price}>$30</div>
         </div>
 
-        {/* Email */}
-        <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="email">
-            Email Address <span style={styles.required}>*</span>
-          </label>
-          <input
-            style={{
-              ...styles.input,
-              ...(errors.email && {borderColor: 'red'})
-            }}
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-          />
-          {errors.email && <p style={styles.error}>{errors.email}</p>}
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div style={styles.formSection}>
+            <h3 style={styles.formSectionTitle}>Personal Information</h3>
+            
+            {/* Full Name */}
+            <div style={styles.formGroup}>
+              <label style={styles.label} htmlFor="fullName">
+                Full Name <span style={styles.required}>*</span>
+              </label>
+              <input
+                style={{
+                  ...styles.input,
+                  ...(errors.fullName && {borderColor: '#ef4444'})
+                }}
+                type="text"
+                id="fullName"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                onFocus={(e) => e.target.style.boxShadow = styles.inputFocus.boxShadow}
+                onBlur={(e) => e.target.style.boxShadow = 'none'}
+              />
+              {errors.fullName && <p style={styles.error}>{errors.fullName}</p>}
+            </div>
 
-        {/* Shoot Category */}
-        <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="shootCategory">
-            Shoot Category <span style={styles.required}>*</span>
-          </label>
-          <select
-            style={{
-              ...styles.select,
-              ...(errors.shootCategory && {borderColor: 'red'})
-            }}
-            id="shootCategory"
-            name="shootCategory"
-            value={formData.shootCategory}
-            onChange={handleChange}
-          >
-            <option value="">Select a category</option>
-            <option value="individual">Individual Portrait</option>
-            <option value="group">Group Portrait</option>
-          </select>
-          {errors.shootCategory && <p style={styles.error}>{errors.shootCategory}</p>}
-        </div>
+            {/* Email */}
+            <div style={styles.formGroup}>
+              <label style={styles.label} htmlFor="email">
+                Email Address <span style={styles.required}>*</span>
+              </label>
+              <input
+                style={{
+                  ...styles.input,
+                  ...(errors.email && {borderColor: '#ef4444'})
+                }}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                onFocus={(e) => e.target.style.boxShadow = styles.inputFocus.boxShadow}
+                onBlur={(e) => e.target.style.boxShadow = 'none'}
+              />
+              {errors.email && <p style={styles.error}>{errors.email}</p>}
+            </div>
 
-        {/* Photo Code - Auto-generated and read-only */}
-        {photoCode && (
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="photoCode">
-              Photo Code
-            </label>
-            <input
-              style={{...styles.input, backgroundColor: '#f9fafb'}}
-              id="photoCode"
-              type="text"
-              value={photoCode}
-              readOnly
-            />
+            {/* Phone Number (Optional) */}
+            <div style={styles.formGroup}>
+              <label style={styles.label} htmlFor="phoneNumber">
+                Phone Number <span style={{fontSize: '13px', color: '#6b7280'}}>(Optional)</span>
+              </label>
+              <input
+                style={styles.input}
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                placeholder="Enter your phone number"
+                onFocus={(e) => e.target.style.boxShadow = styles.inputFocus.boxShadow}
+                onBlur={(e) => e.target.style.boxShadow = 'none'}
+              />
+            </div>
           </div>
-        )}
 
-        {/* Additional Email Contacts */}
-        <div style={styles.formGroup}>
-          <label style={styles.label}>
-            Additional Email Contacts
-          </label>
-          {formData.additionalEmails.map((email, index) => (
-            <div key={index}>
-              <div style={styles.inputContainer}>
+          <div style={styles.formSection}>
+            <h3 style={styles.formSectionTitle}>Shoot Details</h3>
+            
+            {/* Shoot Category */}
+            <div style={styles.formGroup}>
+              <label style={styles.label} htmlFor="shootCategory">
+                Shoot Category <span style={styles.required}>*</span>
+              </label>
+              <select
+                style={{
+                  ...styles.select,
+                  ...(errors.shootCategory && {borderColor: '#ef4444'})
+                }}
+                id="shootCategory"
+                name="shootCategory"
+                value={formData.shootCategory}
+                onChange={handleChange}
+                onFocus={(e) => e.target.style.boxShadow = styles.inputFocus.boxShadow}
+                onBlur={(e) => e.target.style.boxShadow = 'none'}
+              >
+                <option value="">Select a category</option>
+                <option value="individual">Individual Portrait</option>
+                <option value="group">Group Portrait</option>
+              </select>
+              {errors.shootCategory && <p style={styles.error}>{errors.shootCategory}</p>}
+            </div>
+
+            {/* Photo Code - Auto-generated and read-only */}
+            {photoCode && (
+              <div style={styles.formGroup}>
+                <label style={styles.label} htmlFor="photoCode">
+                  Photo Code
+                </label>
                 <input
                   style={{
-                    ...styles.input,
-                    ...(errors[`additionalEmail${index}`] && {borderColor: 'red'})
+                    ...styles.input, 
+                    backgroundColor: '#f9fafb',
+                    fontWeight: 'bold',
+                    letterSpacing: '1px',
+                    fontFamily: 'monospace',
+                    fontSize: '18px',
+                    color: '#2563eb'
                   }}
-                  type="email"
-                  value={email}
-                  onChange={(e) => handleAdditionalEmailChange(index, e.target.value)}
-                  placeholder="Additional email contact"
+                  id="photoCode"
+                  type="text"
+                  value={photoCode}
+                  readOnly
                 />
-                {index > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => removeEmailField(index)}
-                    style={styles.removeButton}
-                  >
-                    -
-                  </button>
-                )}
               </div>
-              {errors[`additionalEmail${index}`] && 
-                <p style={styles.error}>{errors[`additionalEmail${index}`]}</p>
-              }
+            )}
+          </div>
+
+          <div style={styles.formSection}>
+            <h3 style={styles.formSectionTitle}>Additional Information</h3>
+            
+            {/* Additional Email Contacts */}
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                Additional Email Contacts <span style={{fontSize: '13px', color: '#6b7280'}}>(Optional)</span>
+              </label>
+              {formData.additionalEmails.map((email, index) => (
+                <div key={index}>
+                  <div style={styles.inputContainer}>
+                    <input
+                      style={{
+                        ...styles.input,
+                        ...(errors[`additionalEmail${index}`] && {borderColor: '#ef4444'})
+                      }}
+                      type="email"
+                      value={email}
+                      onChange={(e) => handleAdditionalEmailChange(index, e.target.value)}
+                      placeholder="Additional email contact"
+                      onFocus={(e) => e.target.style.boxShadow = styles.inputFocus.boxShadow}
+                      onBlur={(e) => e.target.style.boxShadow = 'none'}
+                    />
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => removeEmailField(index)}
+                        style={styles.removeButton}
+                      >
+                        −
+                      </button>
+                    )}
+                  </div>
+                  {errors[`additionalEmail${index}`] && 
+                    <p style={styles.error}>{errors[`additionalEmail${index}`]}</p>
+                  }
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addEmailField}
+                style={styles.addButton}
+              >
+                <span style={{marginRight: '4px', fontSize: '16px'}}>+</span> Add another email
+              </button>
             </div>
-          ))}
+
+            {/* Notes (Optional) */}
+            <div style={styles.formGroup}>
+              <label style={styles.label} htmlFor="notes">
+                Notes <span style={{fontSize: '13px', color: '#6b7280'}}>(Optional)</span>
+              </label>
+              <textarea
+                style={styles.textarea}
+                id="notes"
+                name="notes"
+                value={formData.notes}
+                onChange={handleChange}
+                placeholder="Any special requests for your photo shoot..."
+                onFocus={(e) => e.target.style.boxShadow = styles.inputFocus.boxShadow}
+                onBlur={(e) => e.target.style.boxShadow = 'none'}
+              ></textarea>
+            </div>
+            
+            {/* Social Media Consent Checkbox */}
+            <div style={styles.checkboxContainer}>
+              <input
+                type="checkbox"
+                id="socialMediaConsent"
+                name="socialMediaConsent"
+                checked={formData.socialMediaConsent}
+                onChange={handleCheckboxChange}
+                style={styles.checkbox}
+              />
+              <label htmlFor="socialMediaConsent" style={styles.checkboxLabel}>
+                I consent to having my images shared on Watlie Studios social media pages
+              </label>
+            </div>
+            
+            {/* Important Note about Screenshots */}
+            <div style={styles.infoNote}>
+              <span style={styles.infoIcon}>ℹ️</span>
+              <span style={styles.infoText}>
+                Please take a screenshot of your photo code after submission. You'll need to show this code to your photographer.
+              </span>
+            </div>
+          </div>
+
+          {/* Footer Information */}
+          <div style={styles.footerInfo}>
+            <p>Images will be ready approximately 2 weeks from your shoot date.</p>
+            <p style={{marginTop: '8px'}}>For inquiries, please visit <strong>watliephotography.com</strong></p>
+          </div>
+
+          {/* Submit Button */}
           <button
-            type="button"
-            onClick={addEmailField}
-            style={styles.addButton}
+            type="submit"
+            disabled={isSubmitting}
+            style={{
+              ...styles.submitButton,
+              ...(isSubmitting && styles.disabledButton)
+            }}
           >
-            + Add another email
+            {isSubmitting ? 'Submitting...' : 'Submit Registration'}
           </button>
-        </div>
-
-        {/* Phone Number (Optional) */}
-        <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="phoneNumber">
-            Phone Number (Optional)
-          </label>
-          <input
-            style={styles.input}
-            type="tel"
-            id="phoneNumber"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            placeholder="Enter your phone number"
-          />
-        </div>
-
-        {/* Notes (Optional) */}
-        <div style={styles.formGroup}>
-          <label style={styles.label} htmlFor="notes">
-            Notes (Optional)
-          </label>
-          <textarea
-            style={styles.textarea}
-            id="notes"
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            placeholder="Any special requests for your photo shoot..."
-          ></textarea>
-        </div>
-
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          style={{
-            ...styles.submitButton,
-            ...(isSubmitting && styles.disabledButton)
-          }}
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Registration'}
-        </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
